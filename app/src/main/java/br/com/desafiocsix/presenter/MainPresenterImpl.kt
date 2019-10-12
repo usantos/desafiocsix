@@ -1,13 +1,17 @@
 package br.com.desafiocsix.presenter
 
-
 import br.com.desafiocsix.interactor.interfaces.LoadItemsInteractor
 import br.com.desafiocsix.presenter.interfaces.MainPresenter
 import br.com.desafiocsix.request.GitRepository
 import br.com.desafiocsix.view.interfaces.MainView
 
-class MainPresenterImpl(mainView: MainView, private val findItemsInteractor: LoadItemsInteractor) : MainPresenter,
-    LoadItemsInteractor.OnFinishedListener {
+class MainPresenterImpl(mainView: MainView, private val findItemsInteractor: LoadItemsInteractor) : MainPresenter, LoadItemsInteractor.OnFinishedListener {
+
+    override fun onItemLongClick(position: Int) {
+        if (mainView != null) {
+            mainView!!.showMessage("Posição " + (position + 1) + " clicada")
+        }
+    }
 
     var mainView: MainView? = null
         private set
@@ -20,7 +24,6 @@ class MainPresenterImpl(mainView: MainView, private val findItemsInteractor: Loa
         if (mainView != null) {
             mainView!!.showProgress()
         }
-
         findItemsInteractor.getRepositoryList(this, 1)
     }
 

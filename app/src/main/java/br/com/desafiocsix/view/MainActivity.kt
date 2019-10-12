@@ -2,24 +2,37 @@ package br.com.desafiocsix.view
 
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
+import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import br.com.desafiocsix.R
+import br.com.desafiocsix.adapter.RepositoriesRecyclerAdapter
 import br.com.desafiocsix.interactor.LoadItemsInteractorImpl
 import br.com.desafiocsix.presenter.MainPresenterImpl
 import br.com.desafiocsix.presenter.interfaces.MainPresenter
 import br.com.desafiocsix.request.GitRepository
 import br.com.desafiocsix.view.interfaces.MainView
+import butterknife.BindView
+import butterknife.ButterKnife
 
 class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListener {
 
     private lateinit var presenter: MainPresenter
+    private lateinit var gitRepoAdapter : RepositoriesRecyclerAdapter
+
+    @BindView(R.id.git_repo_list)
+    lateinit var recyclerView: RecyclerView
+
+    @BindView(R.id.progress)
+    lateinit var progressBar: ProgressBar
+
+    @BindView(R.id.nav_view)
+    lateinit var navView: BottomNavigationView
 
     override fun onResume() {
-        super.onResume()
         presenter.onResume()
+        super.onResume()
     }
 
     override fun onDestroy() {
@@ -28,23 +41,22 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
     }
 
     override fun showProgress() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.INVISIBLE
     }
 
     override fun hideProgress() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        progressBar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
     }
 
     override fun setRepositoryItems(items: List<GitRepository>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        gitRepoAdapter.submitList(items)
+        recyclerView.adapter = gitRepoAdapter
     }
 
     override fun showMessage(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onItemClick(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-        presenter.onItemClicked(position)
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private lateinit var textMessage: TextView
@@ -69,9 +81,13 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        ButterKnife.bind(this)
+        gitRepoAdapter = RepositoriesRecyclerAdapter()
         presenter = MainPresenterImpl(this, LoadItemsInteractorImpl())
-        textMessage = findViewById(R.id.message)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        presenter.onItemClicked(position)
     }
 }

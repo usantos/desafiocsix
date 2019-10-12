@@ -3,19 +3,12 @@ package br.com.desafiocsix.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object ApiClient {
+class ApiClient {
 
-    private var BASE_URL = "https://api.github.com/search/repositories?q=language:kotlin&sort=stars&page=1"
-    private var retrofit: Retrofit? = null
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("https://api.github.com/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 
-    val results: Retrofit
-        get() {
-            if (retrofit == null) {
-                retrofit = Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-            }
-            return results
-        }
+    fun apiService() = retrofit.create(ApiInterface::class.java)
 }

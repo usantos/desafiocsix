@@ -29,5 +29,5 @@ public interface LoadItemsInteractor {
         void onFailure(Throwable t);
     }
 
-    void getRepositoryList(OnFinishedListener onFinishedListener, int pageNo);
+    void getRepositoryList(OnFinishedListener onFinishedListener, int page);
 }

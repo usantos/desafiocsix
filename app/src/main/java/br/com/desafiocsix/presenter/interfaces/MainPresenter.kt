@@ -7,4 +7,6 @@ interface MainPresenter {
     fun onItemClicked(position: Int)
 
     fun onDestroy()
+
+    fun onItemLongClick(position: Int)
 }
