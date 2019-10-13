@@ -5,9 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import br.com.desafiocsix.R
 import br.com.desafiocsix.request.GitRepository
 import kotlinx.android.synthetic.main.item_git_repository.view.*
+import com.bumptech.glide.Glide
+import android.widget.ImageView
+
 
 class GitRepoRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -20,7 +22,7 @@ class GitRepoRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryViewHolder {
         return RepositoryViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_git_repository, parent, false)
+            LayoutInflater.from(parent.context).inflate(br.com.desafiocsix.R.layout.item_git_repository, parent, false)
         )
     }
 
@@ -40,9 +42,12 @@ class GitRepoRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class RepositoryViewHolder constructor(itemView: View): RecyclerView.ViewHolder(itemView){
 
         private val repoName: TextView = itemView.tv_item_name
+        private val userImage: ImageView = itemView.iv_item_avatar
 
         fun bind(gitRepo: GitRepository){
             repoName.text = gitRepo.name
+            Glide.with(itemView.context).load(gitRepo.owner.avatar_url).into(userImage)
+
             itemView.setOnClickListener {
                 onItemClick?.invoke(items[adapterPosition])
             }
