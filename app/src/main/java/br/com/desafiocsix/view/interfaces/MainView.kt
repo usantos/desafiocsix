@@ -9,7 +9,7 @@ interface MainView {
 
     fun hideProgress()
 
-    fun setRepositoryItems(items: List<GitRepository>)
+    fun populateRecyclerGitRepo(items: List<GitRepository>)
 
     fun showMessage(message: String)
 }

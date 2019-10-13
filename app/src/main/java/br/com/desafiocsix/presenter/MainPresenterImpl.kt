@@ -7,14 +7,13 @@ import br.com.desafiocsix.view.interfaces.MainView
 
 class MainPresenterImpl(mainView: MainView, private val findItemsInteractor: LoadItemsInteractor) : MainPresenter, LoadItemsInteractor.OnFinishedListener {
 
+    private var mainView: MainView? = null
+
     override fun onItemLongClick(position: Int) {
         if (mainView != null) {
             mainView!!.showMessage("Posição " + (position + 1) + " clicada")
         }
     }
-
-    var mainView: MainView? = null
-        private set
 
     init {
         this.mainView = mainView
@@ -39,7 +38,7 @@ class MainPresenterImpl(mainView: MainView, private val findItemsInteractor: Loa
 
     override fun onFinished(items: List<GitRepository>) {
         if (mainView != null) {
-            mainView!!.setRepositoryItems(items)
+            mainView!!.populateRecyclerGitRepo(items)
             mainView!!.hideProgress()
         }
     }

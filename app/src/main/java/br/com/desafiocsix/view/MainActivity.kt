@@ -5,9 +5,10 @@ import android.view.View
 import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.desafiocsix.R
-import br.com.desafiocsix.adapter.RepositoriesRecyclerAdapter
+import br.com.desafiocsix.adapter.GitRepoRecyclerAdapter
 import br.com.desafiocsix.interactor.LoadItemsInteractorImpl
 import br.com.desafiocsix.presenter.MainPresenterImpl
 import br.com.desafiocsix.presenter.interfaces.MainPresenter
@@ -19,10 +20,10 @@ import butterknife.ButterKnife
 class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListener {
 
     private lateinit var presenter: MainPresenter
-    private lateinit var gitRepoAdapter : RepositoriesRecyclerAdapter
+    private lateinit var gitRepoAdapter : GitRepoRecyclerAdapter
 
     @BindView(R.id.git_repo_list)
-    lateinit var recyclerView: RecyclerView
+    lateinit var gitRepoRecyclerView: RecyclerView
 
     @BindView(R.id.progress)
     lateinit var progressBar: ProgressBar
@@ -42,17 +43,25 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
 
     override fun showProgress() {
         progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.INVISIBLE
+        gitRepoRecyclerView.visibility = View.INVISIBLE
     }
 
     override fun hideProgress() {
         progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
+        gitRepoRecyclerView.visibility = View.VISIBLE
     }
 
-    override fun setRepositoryItems(items: List<GitRepository>) {
-        gitRepoAdapter.submitList(items)
-        recyclerView.adapter = gitRepoAdapter
+    override fun populateRecyclerGitRepo(items: List<GitRepository>) {
+
+        gitRepoRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            gitRepoAdapter = GitRepoRecyclerAdapter()
+            gitRepoAdapter.submitList(items)
+            adapter = gitRepoAdapter
+            gitRepoAdapter.onItemClick = { gitRepo ->
+                Toast.makeText(this@MainActivity, gitRepo.name, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     override fun showMessage(message: String) {
@@ -63,7 +72,7 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                textMessage.setText(R.string.title_home)
+                //textMessage.setText(R.string.title_home)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
@@ -71,7 +80,7 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
-                textMessage.setText(R.string.title_notifications)
+                //textMessage.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -82,7 +91,7 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
-        gitRepoAdapter = RepositoriesRecyclerAdapter()
+
         presenter = MainPresenterImpl(this, LoadItemsInteractorImpl())
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }

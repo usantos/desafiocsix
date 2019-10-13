@@ -9,9 +9,10 @@ import br.com.desafiocsix.R
 import br.com.desafiocsix.request.GitRepository
 import kotlinx.android.synthetic.main.item_git_repository.view.*
 
-class RepositoriesRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GitRepoRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<GitRepository> = ArrayList()
+    var onItemClick: ((GitRepository) -> Unit)? = null
 
     fun submitList(gitRepoList: List<GitRepository>){
         items = gitRepoList
@@ -36,11 +37,15 @@ class RepositoriesRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
         return items.size
     }
 
-    class RepositoryViewHolder constructor(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class RepositoryViewHolder constructor(itemView: View): RecyclerView.ViewHolder(itemView){
+
         private val repoName: TextView = itemView.tv_item_name
 
         fun bind(gitRepo: GitRepository){
             repoName.text = gitRepo.name
+            itemView.setOnClickListener {
+                onItemClick?.invoke(items[adapterPosition])
+            }
         }
     }
 }
