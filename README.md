@@ -1,10 +1,9 @@
 App para consultar a API do Github e trazer os repositórios com mais estrelas em Kotlin.
 
-Exemplo da chamada
-  - https://api.github.com/search/repositories?q=language:kotlin&sort=stars&page=1
+Devido a falta de tempo, vou ficar devendo:
 
-- Exibir nome do repo, quantidade de estrelas, quantidade de fork, foto e nome do autor
+- Scroll infinito, já funciona porém terei que ajustar o algoritimo, pois a lista da API do GitHub só retorna 1000 itens, terei que tratar  para não dar crash
 
-- Scroll infinito
+- Testes unitários - Comecei com o Roboeletric mas removi, para não enviar incompleto.
 
-- Testes unitários
+Fiz o projeto em Kotlin com MPV, com um layout bem básico de RecyclerView.
