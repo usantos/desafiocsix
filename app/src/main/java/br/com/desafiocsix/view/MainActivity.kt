@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
 
     private lateinit var presenter: MainPresenter
     private lateinit var gitRepoAdapter : GitRepoRecyclerAdapter
+    private var pageToLoad: Int = 1
 
     @BindView(R.id.git_repo_list)
     lateinit var gitRepoRecyclerView: RecyclerView
@@ -51,8 +52,7 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
         gitRepoRecyclerView.visibility = View.VISIBLE
     }
 
-    override fun populateRecyclerGitRepo(items: List<GitRepository>) {
-
+    private fun loadRecyclerGitRepo(items: List<GitRepository>){
         gitRepoRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             gitRepoAdapter = GitRepoRecyclerAdapter()
@@ -61,7 +61,22 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
             gitRepoAdapter.onItemClick = { gitRepo ->
                 Toast.makeText(this@MainActivity, gitRepo.name, Toast.LENGTH_LONG).show()
             }
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (!recyclerView.canScrollVertically(1) && dy != 0) {
+                        if(pageToLoad <= 34){
+                            populateData(pageToLoad)
+                            pageToLoad++
+                            loadRecyclerGitRepo(items)
+                        }
+                    }
+                }
+            })
         }
+    }
+
+    override fun populateRecyclerGitRepo(items: List<GitRepository>) {
+        loadRecyclerGitRepo(items)
     }
 
     override fun showMessage(message: String) {
@@ -76,7 +91,7 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-                textMessage.setText(R.string.title_dashboard)
+                //textMessage.setText(R.string.title_dashboard)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
@@ -92,8 +107,12 @@ class MainActivity : AppCompatActivity(), MainView, AdapterView.OnItemClickListe
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
 
-        presenter = MainPresenterImpl(this, LoadItemsInteractorImpl())
+        populateData(pageToLoad)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+    }
+
+    private fun populateData(page: Int){
+        presenter = MainPresenterImpl(this, LoadItemsInteractorImpl(), page)
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

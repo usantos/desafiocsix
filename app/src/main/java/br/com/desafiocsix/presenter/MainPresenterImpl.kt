@@ -5,9 +5,10 @@ import br.com.desafiocsix.presenter.interfaces.MainPresenter
 import br.com.desafiocsix.request.GitRepository
 import br.com.desafiocsix.view.interfaces.MainView
 
-class MainPresenterImpl(mainView: MainView, private val findItemsInteractor: LoadItemsInteractor) : MainPresenter, LoadItemsInteractor.OnFinishedListener {
+class MainPresenterImpl(mainView: MainView, private val findItemsInteractor: LoadItemsInteractor, page: Int) : MainPresenter, LoadItemsInteractor.OnFinishedListener {
 
     private var mainView: MainView? = null
+    private var page = 1;
 
     override fun onItemLongClick(position: Int) {
         if (mainView != null) {
@@ -17,13 +18,14 @@ class MainPresenterImpl(mainView: MainView, private val findItemsInteractor: Loa
 
     init {
         this.mainView = mainView
+        this.page = page
     }
 
     override fun onResume() {
         if (mainView != null) {
             mainView!!.showProgress()
         }
-        findItemsInteractor.getRepositoryList(this, 1)
+        findItemsInteractor.getRepositoryList(this, page)
     }
 
     override fun onItemClicked(position: Int) {

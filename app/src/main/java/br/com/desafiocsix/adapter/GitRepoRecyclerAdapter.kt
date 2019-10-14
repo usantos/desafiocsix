@@ -42,10 +42,16 @@ class GitRepoRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class RepositoryViewHolder constructor(itemView: View): RecyclerView.ViewHolder(itemView){
 
         private val repoName: TextView = itemView.tv_item_name
+        private val ownerName: TextView = itemView.tv_owner_name
+        private val forkCounter: TextView = itemView.tv_fork_counter
+        private val starCounter: TextView = itemView.tv_star_counter
         private val userImage: ImageView = itemView.iv_item_avatar
 
         fun bind(gitRepo: GitRepository){
             repoName.text = gitRepo.name
+            ownerName.text = "Owner Login:" + gitRepo.owner.login
+            forkCounter.text = "Fork Counter:" + gitRepo.forksCount.toString()
+            starCounter.text = "Star Count:" + gitRepo.stargazers_count.toString()
             Glide.with(itemView.context).load(gitRepo.owner.avatar_url).into(userImage)
 
             itemView.setOnClickListener {

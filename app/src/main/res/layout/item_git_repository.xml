@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+        android:background="@color/colorRecyclerItem"
+        android:layout_marginBottom="2dp"
         android:padding="10dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -28,8 +30,56 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textSize="16sp"
-                android:text=""
+                android:text="Repository"
                 android:textStyle="bold" />
+
+        <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/iv_item_avatar"
+                android:layout_below="@+id/tv_item_name"
+                android:id="@+id/tv_star_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:text="000"
+                android:textStyle="normal" />
+
+        <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/iv_item_avatar"
+                android:layout_below="@+id/tv_star_counter"
+                android:id="@+id/tv_fork_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:text="000"
+                android:textStyle="normal" />
+
+        <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/iv_item_avatar"
+                android:layout_below="@+id/tv_fork_counter"
+                android:id="@+id/tv_owner_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:text="Author"
+                android:textStyle="normal" />
 
     </RelativeLayout>
 </LinearLayout>
