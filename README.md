@@ -6,4 +6,4 @@ Devido a falta de tempo, vou ficar devendo:
 
 - Testes unitários - Comecei com o Roboeletric mas removi, para não enviar incompleto.
 
-Fiz o projeto em Kotlin com MPV, com um layout bem básico de RecyclerView.
+Fiz o projeto em Kotlin com MVP, com um layout bem básico de RecyclerView.
